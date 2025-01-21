@@ -1,21 +1,17 @@
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
 
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-
-SECRET_KEY = 'django-insecure-nptf1!!4+o5*y$%tvg#v6oo42l@_x7181exf*r#@xnpsh4(ty4'
-
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 INSTALLED_APPS = [
@@ -45,7 +41,7 @@ ROOT_URLCONF = 'Management.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/ 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,7 +111,7 @@ LOGGING = {
         "file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "logs", "error.log"),  # Correct path
+            "filename": os.path.join(BASE_DIR, "logs", "error.log"),  
         },
     },
     "loggers": {
@@ -129,3 +125,7 @@ LOGGING = {
 
 
 AUTH_USER_MODEL = "authentication.User"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
